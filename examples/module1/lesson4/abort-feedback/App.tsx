@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 interface User {
   id: number;
@@ -9,27 +10,58 @@ const API_URL = '/api/data/users?timeout=10000';
 
 const App = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState(false);
+
+  let controller: AbortController | null = null;
+
+  async function getApiData(controller: AbortController) {
+    const data = await axios.get(API_URL, {
+      timeout: 5000,
+      signal: controller.signal,
+    });
+    return data;
+  }
 
   useEffect(() => {
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then(({ users }) => {
-        setUsers(users);
-      });
+    handleFetchData();
   }, []);
+
+  async function handleFetchData() {
+    setError(false);
+    if (controller) {
+      controller.abort();
+    }
+
+    try {
+      console.log('Nowe zapytanie');
+      controller = new AbortController();
+      const { data } = await getApiData(controller);
+      setUsers(data.users);
+    } catch (error) {
+      if (!axios.isCancel(error)) {
+        console.log('Błąd:', error);
+        setError(true);
+      }
+    }
+  }
 
   return (
     <div>
       <div className="flex flex-row items-center justify-between py-4">
         <h1 className="text-2xl font-bold">Users</h1>
-        <div className="flex flex-row items-center">
-          <p className="mr-2">
-            Sorry, there seems to be connectivity issues...
-          </p>
-          <button className="text-blue-400 bg-blue-200 hover:text-blue-200 hover:bg-blue-400 rounded-md p-4">
-            Try again
-          </button>
-        </div>
+        {error && (
+          <div className="flex flex-row items-center">
+            <p className="mr-2">
+              'Sorry, there seems to be connectivity issues...'
+            </p>
+            <button
+              onClick={handleFetchData}
+              className="text-blue-400 bg-blue-200 hover:text-blue-200 hover:bg-blue-400 rounded-md p-4"
+            >
+              Try again
+            </button>
+          </div>
+        )}
       </div>
       <ul className="space-y-2">
         {users.map((user, index) => (
