@@ -5,9 +5,5 @@ const rootElement = document.getElementById('app')!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
 
-  root.render(
-    <>
-      <App />
-    </>
-  );
+  root.render(<App />);
 }

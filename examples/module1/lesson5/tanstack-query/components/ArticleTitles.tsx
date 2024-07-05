@@ -1,15 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { useArticle } from '../hooks/useArticle';
 
 function ArticleTitles() {
-  const { isPending, error, data } = useQuery({
-    queryKey: ['repoData'],
-    queryFn: () =>
-      fetch('http://localhost:3000/api/data/articles').then((res) =>
-        res.json()
-      ),
-  });
+  const { isLoading, error, data } = useArticle();
 
-  if (isPending) {
+  if (isLoading) {
     return <h1>Loading...</h1>;
   }
 

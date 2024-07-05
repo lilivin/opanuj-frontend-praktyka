@@ -1,7 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { FormEvent, useState } from 'react';
 import Input from './Input';
+import { useAddArticle } from '../hooks/useAddArticle';
 
 export type Article = {
   id: number;
@@ -19,23 +18,15 @@ const formDefaultState: Article = {
 
 function Form() {
   const [formState, setFormState] = useState(formDefaultState);
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (newArticle: Article) => {
-      return axios.post('/api/data/articles', newArticle);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-      setFormState(formDefaultState);
-    },
-    onError: () => {
-      console.log(`Error`);
-    },
-  });
+  const addArticleMutation = useAddArticle();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    mutation.mutate(formState);
+    addArticleMutation.mutate(formState, {
+      onSuccess: () => {
+        setFormState(formDefaultState);
+      },
+    });
   }
 
   return (
