@@ -4,7 +4,7 @@ import path from 'path';
 dotenv.config();
 
 const BASE_URL = 'https://en.wikipedia.org';
-const PROJECT_DIR = './module2/lesson2/base';
+const PROJECT_DIR = './module2/lesson2/extended';
 const SETUP_PATH_REGEX = '**/*.setup.ts';
 const LOGGED_IN_PATH_REGEX = '**/logged-in/*.spec.ts';
 
@@ -27,8 +27,8 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
     trace: 'on',
-    actionTimeout: process.env.CI ? 10000 : 5000,
-    navigationTimeout: process.env.CI ? 30000 : 15000,
+    actionTimeout: process.env.CI ? 10000 : 10000,
+    navigationTimeout: process.env.CI ? 30000 : 30000,
   },
   outputDir: `${PROJECT_DIR}/playwright/test-results`,
   projects: isRunningExtended

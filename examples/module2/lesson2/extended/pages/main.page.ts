@@ -6,6 +6,7 @@ export class MainPage {
   private readonly url = URLs.MAIN_PAGE;
   readonly navigation: Locator;
   private readonly featuredArticleExcerpt: Locator;
+  private readonly vectorMainMenuExcerpt: Locator;
   private readonly searchInput: Locator;
 
   constructor(page: Page) {
@@ -15,6 +16,8 @@ export class MainPage {
     });
 
     this.featuredArticleExcerpt = page.locator('#mp-tfa');
+
+    this.vectorMainMenuExcerpt = page.locator('#vector-main-menu');
 
     this.searchInput = page
       .getByRole('search')
@@ -27,6 +30,20 @@ export class MainPage {
 
   goToLoginPage() {
     return this.navigation.getByRole('link', { name: 'Log in' }).click();
+  }
+
+  async goToCommunityPortal() {
+    const linkToCommunityPortal = this.vectorMainMenuExcerpt.getByRole('link', {
+      name: 'Community portal',
+    });
+
+    const communityPortalHref = (await linkToCommunityPortal.getAttribute(
+      'href'
+    ))!;
+
+    await linkToCommunityPortal.click();
+
+    return this.page.waitForURL(`**${communityPortalHref}`);
   }
 
   async goToFeaturedArticle() {
