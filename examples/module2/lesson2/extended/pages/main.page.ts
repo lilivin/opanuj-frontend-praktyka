@@ -8,6 +8,7 @@ export class MainPage {
   private readonly featuredArticleExcerpt: Locator;
   private readonly vectorMainMenuExcerpt: Locator;
   private readonly searchInput: Locator;
+  private readonly searchButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -22,6 +23,8 @@ export class MainPage {
     this.searchInput = page
       .getByRole('search')
       .getByRole('searchbox', { name: /Search Wikipedia/i });
+
+    this.searchButton = page.getByRole('button', { name: 'Search' });
   }
 
   navigate() {
@@ -69,6 +72,10 @@ export class MainPage {
 
   getFirstSearchResult() {
     return this.getSearchResults().getByRole('option').first();
+  }
+
+  clickFirstSearchResult() {
+    return this.getSearchResults().getByRole('option').first().click();
   }
 
   getNavigation() {

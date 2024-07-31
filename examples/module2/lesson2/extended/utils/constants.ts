@@ -5,4 +5,5 @@ export const URLs = {
   COMMUNITY_PORTAL_PAGE:
     'https://en.wikipedia.org/wiki/Wikipedia:Community_portal',
   HELPDESK_PAGE: 'https://en.wikipedia.org/wiki/Wikipedia:Help_desk',
+  ARTICLE_PAGE_BASE_URL: 'https://en.wikipedia.org/wiki',
 };
