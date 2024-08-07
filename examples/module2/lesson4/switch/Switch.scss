@@ -1,0 +1,46 @@
+label {
+  display: flex;
+  align-items: center;
+}
+
+label .label {
+  display: inline-block;
+  user-select: none;
+}
+
+label input[role='switch'] {
+  opacity: 0;
+}
+
+label input[role='switch'] ~ .state > .container {
+  position: relative;
+  top: 2px;
+  display: inline-block;
+  border: 2px solid black;
+  width: 40px;
+  border-radius: 11px;
+}
+
+label input[role='switch'] ~ .state > .container > .position {
+  position: relative;
+  top: 1px;
+  left: 2px;
+  display: inline-block;
+  border: 2px solid black;
+  border-radius: 9px;
+  width: 14px;
+  height: 14px;
+  background: black;
+  opacity: 0.6;
+}
+
+label input[role='switch']:checked ~ .state > .container > .position {
+  left: 20px;
+  border-color: green;
+  background: green;
+  opacity: 1;
+}
+
+label input[role='switch']:focus ~ .state > .container {
+  outline: 1px solid blue;
+}
