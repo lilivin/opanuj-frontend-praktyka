@@ -1,13 +1,17 @@
 import axios from 'axios';
 
-// Add a request interceptor
 axios.interceptors.request.use(function (config) {
+  config.metadata = { startTime: performance.now() };
   return config;
 });
 
-// Add a response interceptor
 axios.interceptors.response.use(function (response) {
-  // Do something with response data
+  const {
+    config: { metadata },
+  } = response;
+  console.log(
+    `Czas zapytania ${Math.floor(performance.now() - metadata.startTime)}ms`
+  );
   return response;
 });
 
