@@ -84,17 +84,22 @@ function CommentsForm({
   const { commentsAPI } = useLoaderData() as Bootstrap;
   const [newComment, setNewComment] = useState('');
   const [newRating, setNewRating] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   function storeNewComment(e: React.FormEvent<HTMLFormElement>) {
+    setError(false);
+    setLoading(true);
+    const comment = {
+      id: comments.length + 1,
+      text: newComment,
+      author: 'John Doe',
+      rating: parseInt(newRating, 10),
+    };
     e.preventDefault();
     dispatch({
       type: 'ADD_COMMENT',
-      payload: {
-        id: comments.length + 1,
-        text: newComment,
-        author: 'John Doe',
-        rating: parseInt(newRating, 10),
-      },
+      payload: comment,
     });
     setNewComment('');
     setNewRating('');
@@ -104,12 +109,21 @@ function CommentsForm({
         rating: newRating,
       })
       .catch(() => {
-        // Rollback the comment if the request fails
+        dispatch({
+          type: 'REMOVE_COMMENT',
+          payload: comment.id,
+        });
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
   return (
     <>
+      {loading && <p>Storing new comment...</p>}
+      {error && <p>Error! Try again...</p>}
       {comments.length > 0 && (
         <form onSubmit={(e) => storeNewComment(e)}>
           <div className="flex flex-col">
